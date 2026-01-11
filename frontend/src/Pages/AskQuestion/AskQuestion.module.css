@@ -21,7 +21,7 @@
 .instructions h2 {
   font-size: 24px;
   margin-bottom: 15px;
-  color: #3b455a;
+  color: #3b455afb;
 }
 
 .instructions ul {
@@ -47,10 +47,10 @@
 .home_link {
   display: block;
   margin-top: 5px;
-  color: #fe8402;
+  color: #fe8402f1;
   text-decoration: none;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .home_link:hover {

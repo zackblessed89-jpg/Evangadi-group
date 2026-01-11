@@ -3,11 +3,10 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 40px 20px;
-
   color: #3b455a;
 }
 
-/* --- Header Section --- */
+/* --- Header part --- */
 .header_row {
   display: flex;
   justify-content: space-between;
@@ -70,18 +69,18 @@
   top: 50%;
   transform: translateY(-50%);
   color: #adb5bd;
-  pointer-events: none; /* Allows clicking "through" to the input */
+  pointer-events: none; /*this  Allow us clicking "through" to the input */
 }
 
 .search_bar {
   width: 100%;
-  padding: 14px 15px 14px 50px; /* 50px left padding for the icon space */
+  padding: 14px 15px 14px 50px; 
   border: 1px solid #ced4da;
   border-radius: 8px;
   font-size: 1rem;
   outline: none;
   transition: all 0.3s ease;
-  box-sizing: border-box; /* Crucial for width calculation */
+  box-sizing: border-box; 
 }
 
 .search_bar:focus {
@@ -89,7 +88,7 @@
   box-shadow: 0 0 8px rgba(254, 132, 2, 0.1);
 }
 
-/* --- Question List Section --- */
+/* --- Question List part --- */
 .question_list_wrapper {
   margin-top: 20px;
 }
@@ -107,7 +106,7 @@
   margin-bottom: 24px;
 }
 
-/* --- Scroll To Top Section --- */
+/* -- Scroll To Top Section --- */
 .scroll_top_container {
   display: flex;
   justify-content: center;
@@ -118,7 +117,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #3b455a; /* Darker blue/grey for contrast */
+  background-color: #3b455a; 
   color: white;
   padding: 12px 24px;
   border: none;
@@ -138,6 +137,7 @@
 .scrollTopButton:active {
   transform: translateY(0);
 }
+
 
 /* --- Responsive Design --- */
 @media (max-width: 768px) {

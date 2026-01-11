@@ -2,26 +2,24 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ArrowUp, Search } from "lucide-react";
-import QuestionList from "../../features/questions/QuestionList/QuestionList";
 import classes from "./Home.module.css";
+import QuestionList from "../../features/questions/QuestionList/QuestionList";
 
-const Home = () => {
+
+function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  // to scroll to top smoothly
 
-  // Function to scroll smoothly to the top
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
   const handleAskQuestion = (e) => {
     e.preventDefault();
     navigate("/ask");
   };
-
 
   return (
     <div className={classes.home_container}>
@@ -29,6 +27,7 @@ const Home = () => {
         <button onClick={handleAskQuestion} className={classes.askButton}>
           Ask Question
         </button>
+
         <h2 className={classes.welcome}>
           <span className={classes.wave_emoji}>👋</span> {""}
           Welcome:
@@ -42,7 +41,7 @@ const Home = () => {
         <Search className={classes.search_icon} size={18} />
         <input
           type="text"
-          placeholder="Search questions..."
+          placeholder="Search questions...."
           className={classes.search_bar}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -51,14 +50,14 @@ const Home = () => {
           <button
             onClick={() => setSearchTerm("")}
             style={{
+              color: "#999",
+              cursor: "pointer",
+              border: "none",
+              background: "none",
               position: "absolute",
               right: "20px",
               top: "50%",
               transform: "translateY(-50%)",
-              border: "none",
-              background: "none",
-              cursor: "pointer",
-              color: "#999",
             }}
           >
             ✕
@@ -72,15 +71,15 @@ const Home = () => {
         <QuestionList searchTerm={searchTerm} />
       </div>
 
-      {/* 1. Add the Scroll to Top Button at the end */}
       <div className={classes.scroll_top_container}>
-        <button onClick={scrollToTop} className={classes.scrollTopButton}>
+        <button onClick={scrollToTop}>
+          className={classes.scrollTopButton}
           <ArrowUp size={20} />
-          Back to Top
+          Back To Top
         </button>
       </div>
     </div>
   );
-};
+}
 
 export default Home;

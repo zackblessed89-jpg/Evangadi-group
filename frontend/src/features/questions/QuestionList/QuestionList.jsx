@@ -4,87 +4,82 @@ import { CircleUser } from "lucide-react";
 import { getAllQuestions } from "../questionService";
 import classes from "./QuestionList.module.css";
 
-// 1. Accept searchTerm as a prop from Home.jsx
-const QuestionList = ({ searchTerm }) => {
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
+function QuestionList({ searchTerm }) {
+  const [question, setQuestion] = useState([]);
+  const [Loader, setLoader] = useState(true);
+
 
   useEffect(() => {
-    const fetchQuestions = async () => {
+    const fetchQuestion = async () => {
       try {
-        setLoading(true);
+        setLoader(true);
         const data = await getAllQuestions();
 
-        // Extracting the 'data' array from response
+        // Extract the data array from the response we got
         const extractedQuestions = data?.data;
-
         if (Array.isArray(extractedQuestions)) {
-          setQuestions(extractedQuestions);
+          setQuestion(extractedQuestions);
         } else {
-          setQuestions([]);
+          setQuestion([]);
         }
-      } catch (err) {
-        console.error("Error fetching questions:", err);
+      } catch (error) {
+        console.log("Error Fetching Questions:", error);
       } finally {
-        setLoading(false);
+        setLoader(false);
       }
     };
-
-    fetchQuestions();
+    fetchQuestion();
   }, []);
 
-
-  // 2. Filter logic: This creates a new list based on the search input
-  // We handle the case where searchTerm might be undefined initially
-  const filteredQuestions = questions.filter((q) =>
-    q.title.toLowerCase().includes((searchTerm || "").toLowerCase()),
+  // Filter logic:- this creates a new list based on the search input
+  const filteredQuestions = question.filter((q) =>
+    q.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 3. Handle Loading State
-  if (loading) {
-    return <div className={classes.loading}>Loading questions...</div>;
+  // then we handle loading state
+  if (Loader) {
+    return <div className={classes.loading}>Loading Questions ....</div>
   }
 
-
-  // 4. Handle Empty State (No questions at all from DB)
-  if (questions.length === 0) {
-    return (
-      <p className={classes.no_data}>
-        No questions found. Be the first one to ask!
-      </p>
-    );
+  //  handle empty state (when thereis no questions from the db)
+  if(question.length === 0){
+    return(
+      <p className={classes.no_data}>No Questions found.  Be the first one to ask!</p>
+    ) ;
   }
-
+      
   return (
     <div className={classes.question_list}>
-      {/* 5. Handle "No Search Results" state */}
-      {filteredQuestions.length === 0 ? (
-        <p className={classes.no_data}>No questions match your search request.</p>
+
+      {/* to handle no search result */}
+
+      {filteredQuestions.length ===0 ? (
+<p className={classes.no_data}>No Questions match your search.</p>
       ) : (
-        // 6. Map over filteredQuestions so the UI updates as you type
-        filteredQuestions.map((q) => (
+        // to map over filtered questions 
+        filteredQuestions.map((q)=> (
           <Link
-            key={q.questionid || q.id}
-            to={`/question/${q.questionid}`}
-            className={classes.question_item}
+          key={q.questionid || q.id}
+          to={`/question/${q.questionid}`}
+          className={classes.question_item}
           >
             <div className={classes.user_info}>
-              <div className={classes.avatar}>
-                <CircleUser size={40} strokeWidth={1.5} color="#a8a5a5" />
+            <div className={classes.avatar}>
+              <CircleUser size={40} strokeWidth={1.5} color="#a8a5a5" />
               </div>
               <p className={classes.user_name}>{q.username}</p>
-            </div>
-
-            <div className={classes.question_content}>
-              <p className={classes.question_title}>{q.title}</p>
-            </div>
-
-            <div className={classes.arrow}>&gt;</div>
-          </Link>
+              </div>
+              <div className={classes.question_content}>
+                <p className={classes.question_title}>{q.title}</p>
+                </div>
+                <div className={classes.arrow}>&gt;</div>
+                </Link>
         ))
       )}
-    </div>
+      </div>
   );
-};
+};  
+     
+       
 
 export default QuestionList;

@@ -1,4 +1,3 @@
-/* Individual Question Item */
 .question_item {
   display: flex;
   align-items: center;
@@ -8,24 +7,21 @@
   color: inherit;
   transition: background 0.2s ease;
 }
-
 .question_item:hover {
-  background-color: #dbd8d8;
+  background-color: #dbd8db;
   color: #3b50b6;
 }
-
 .question_item:hover .avatar {
   background-color: var(--secondary-blue);
-  color: white;
+  color: #fff;
   transform: scale(1.1);
 }
-
-.question_item:hover .user_name,
+.question_item:hover .username,
 .question_item:hover .question_title {
   color: var(--secondary-blue);
 }
 
-/* Left side: Avatar and Username */
+/* the left side */
 .user_info {
   display: flex;
   flex-direction: column;
@@ -35,50 +31,77 @@
 }
 
 .avatar {
-  font-size: 45px;
-  margin-bottom: 5px;
-  color: var(--text-gray);
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%; /* Makes hover background circular if applicable */
+  margin-bottom: 5px;
+  color: var(--text-gray);
+  transition: all 0.2s ease;
+  font-size: 45px;
+  border-radius: 50%;
 }
-
-.user_name {
+.username {
   font-size: 15px;
   color: var(--text-gray);
   word-break: break-all;
 }
 
-/* Middle: Question Title */
+/* middle part the question title */
 .question_content {
   flex: 1;
-  padding: 0 30px;
+  padding: 20px 30px;                 
+  background-color: #ffffff;          
+  border-radius: 12px;                
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px;                
+  cursor: pointer;                    
+}
+
+.question_content:hover {
+  transform: translateY(-3px);        
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .question_title {
-  font-size: 20px;
-  font-weight: 500;
-  color: #333;
+  font-size: 20px;                     
+  font-weight: 600;                    
+  color: #1a1a1a;                      
+  margin-bottom: 10px;                 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  display: flex;                        
+  align-items: center;                 
+  justify-content: space-between;       
+  gap: 10px;                             
 }
 
-/* Right side: Arrow indicator */
+/* right side */
+
 .arrow {
-  font-size: 24px;
-  color: #2f0707;
-  padding-right: 20px;
+  font-size: 30px;
+  color: #340468;                   
+  transition: transform 0.3s ease, color 0.3s ease; 
+  cursor: pointer;                  
+  flex-shrink: 0;                    
 }
 
-/* States */
+.arrow:hover {
+  transform: translateX(5px) rotate(10deg); 
+  color: #5b96fb;                    
+}
+
+
+/* states */
 .loading,
-.no_data {
-  text-align: center;
+.nodata {
   padding: 50px;
+  text-align: center;
+  font-size: italic;
   color: var(--text-gray);
-  font-style: italic;
 }
 
+/* responsiveness */
 @media (max-width: 600px) {
   .user_info {
     width: 80px;

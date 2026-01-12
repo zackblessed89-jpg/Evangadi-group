@@ -53,3 +53,4 @@ const QuestionForm = () => {
     </div>
   );
 };
+export default QuestionForm;

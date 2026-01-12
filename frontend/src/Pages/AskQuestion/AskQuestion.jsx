@@ -1,32 +1,77 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import QuestionForm from "../../features/questions/QuestionForm/QuestionForm";
 import classes from "./AskQuestion.module.css";
+import { FaLightbulb, FaPenFancy, FaCheckCircle, FaEye } from "react-icons/fa";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+const steps = [
+  {
+    icon: <FaLightbulb />,
+    title: "Summarize",
+    desc: "Write a clear, one-line title for your question.",
+  },
+  {
+    icon: <FaPenFancy />,
+    title: "Describe",
+    desc: "Explain your problem in detail for better understanding.",
+  },
+  {
+    icon: <FaCheckCircle />,
+    title: "Explain",
+    desc: "Mention what you tried and what you expected to happen.",
+  },
+  {
+    icon: <FaEye />,
+    title: "Review",
+    desc: "Check your question for clarity before posting it.",
+  },
+];
 
 const AskQuestion = () => {
+  useEffect(() => {
+    AOS.init({ duration: 600, once: true, easing: "ease-out-cubic" });
+  }, []);
+
   return (
     <div className={classes.ask_page_container}>
       <div className={classes.inner_container}>
-        {/* --- INSTRUCTIONS SECTION --- */}
-        <div className={classes.instructions}>
-          <h2>Steps to write a good question</h2>
+        {/* --- INSTRUCTIONS CARD --- */}
+        <div className={classes.instructions_card} data-aos="fade-up">
+          <h2>How to Ask a Great Question</h2>
+          <p className={classes.instructions_intro}>
+            Follow these steps to get the best answers quickly:
+          </p>
           <ul>
-            <li>Summarize your problem in a one-line title.</li>
-            <li>Describe your problem in more detail.</li>
-            <li>Describe what you tried and what you expected to happen.</li>
-            <li>Review your question and post it to the site.</li>
+            {steps.map((step, index) => (
+              <li
+                key={index}
+                className={classes.step_item}
+                data-aos="fade-right"
+                data-aos-delay={index * 150}
+              >
+                <div className={classes.icon}>{step.icon}</div>
+                <div>
+                  <strong>{step.title}:</strong> {step.desc}
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
 
-        {/* --- FORM SECTION --- */}
-        <div className={classes.form_wrapper}>
+        {/* --- FORM CARD --- */}
+        <div
+          className={classes.form_card}
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
           <div className={classes.form_header}>
-            <h3>Ask a public question</h3>
+            <h3>Ask a Public Question</h3>
             <Link to="/" className={classes.home_link}>
-              Go to All Questions Page
+              ← Back to All Questions
             </Link>
           </div>
-          {/* The Actual Form Feature */}
           <QuestionForm />
         </div>
       </div>

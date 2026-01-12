@@ -3,10 +3,11 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 40px 20px;
+
   color: #3b455a;
 }
 
-/* --- Header part --- */
+/* --- Header Section --- */
 .header_row {
   display: flex;
   justify-content: space-between;

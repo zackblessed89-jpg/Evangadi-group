@@ -1,28 +1,8 @@
-import { useEffect, useState } from 'react';
+
 import classes from './AnswerList.module.css';
-import { getAnswers } from '../../answers/answerService';
 
-const AnswerList = ({ question_id }) => {
-  const [answers, setAnswers] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchAnswers = async () => {
-      try {
-        const data = await getAnswers(question_id);
-        setAnswers(data);
-      } catch (error) {
-        console.error('Failed to fetch answers:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAnswers();
-  }, [question_id]);
-
-  if (loading) return <p>Loading answers...</p>;
-
+const AnswerList = ({ answers }) => {
   return (
     <div className={classes.answers_container}>
       <h3>Answers From The Community</h3>

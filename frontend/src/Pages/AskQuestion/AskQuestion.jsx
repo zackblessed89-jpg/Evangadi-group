@@ -78,3 +78,5 @@ const AskQuestion = () => {
     </div>
   );
 };
+
+export default AskQuestion;

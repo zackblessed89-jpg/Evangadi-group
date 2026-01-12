@@ -35,7 +35,7 @@ async function getAnswers(req, res) {
   try {
     // SQL Logic: We JOIN with the users table to get the 'username' of the person who answered
     const [answers] = await dbConnection.query(
-      `SELECT answers.answer, users.username 
+      `SELECT answers.answer,answers.created_at, users.username 
        FROM answers 
        JOIN users ON answers.userid = users.userid 
        WHERE answers.questionid = ? 

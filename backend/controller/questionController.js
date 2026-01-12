@@ -20,7 +20,7 @@ async function postQuestion(req, res) {
     // Verify user exists
     const [user] = await dbConnection.execute(
       "SELECT userid FROM users WHERE userid = ?",
-      [userid]
+      [userid],
     );
     if (!user.length) {
       return res.status(400).json({ msg: "User does not exist" });
@@ -110,7 +110,7 @@ async function getSingleQuestion(req, res) {
   try {
     // 2. Query the database using a JOIN to get the username of the asker
     const query = `
-      SELECT q.questionid, q.title, q.description, q.tag, u.username 
+      SELECT q.questionid, q.title, q.description, q.tag, q.created_at, u.username 
       FROM questions q 
       JOIN users u ON q.userid = u.userid 
       WHERE q.questionid = ?`;

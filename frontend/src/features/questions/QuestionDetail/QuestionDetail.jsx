@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { User } from "lucide-react";
+import { CircleUser } from "lucide-react";
 
 // Import Services
 import { getSingleQuestion } from "../questionService";
@@ -100,7 +100,7 @@ const QuestionDetail = () => {
                 >
                   <div className={classes.user_info}>
                     <div className={classes.avatar}>
-                      <User size={35} />
+                      <CircleUser size={40} strokeWidth={1.5} color="#787878" />
                     </div>
                     <p className={classes.user_name}>{ans.username}</p>
                     <span className={classes.time_stamp}>

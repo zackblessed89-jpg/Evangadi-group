@@ -4,8 +4,7 @@ import Register from "@/features/auth/Register/Register";
 import classes from "./Landing.module.css";
 
 const Landing = () => {
-  const [isLogin, setIsLogin] = useState(true);
-
+const [isLogin, setIsLogin] = useState(true);
   // Function to switch between Login and Register views
   const toggleAuth = () => {
     setIsLogin((prev) => !prev);
@@ -38,7 +37,7 @@ const Landing = () => {
                 Already have an account?
                 <span onClick={toggleAuth}>Sign in</span>
               </p>
-              <Register hideHeader={true} />
+              <Register hideHeader={true} onSuccess={() => setIsLogin(true)} />
               <p className={classes.terms_text}>
                 I agree to the {""}
                 <a

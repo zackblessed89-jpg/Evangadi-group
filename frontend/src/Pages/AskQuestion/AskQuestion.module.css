@@ -1,0 +1,58 @@
+.ask_page_container {
+  padding: 60px 20px;
+  background-color: #f8f9fa;
+  min-height: 80vh;
+}
+
+.inner_container {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+.instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers the heading and the list container */
+  text-align: center;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.instructions h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #3b455afb;
+}
+
+.instructions ul {
+  /* This trick centers the list block but keeps text left-aligned */
+  display: inline-block;
+  text-align: left;
+
+  list-style: disc;
+  padding-left: 20px; /* Space for bullets */
+  line-height: 2;
+  font-size: 16px;
+  color: #555;
+}
+
+.instructions li {
+  margin-bottom: 5px;
+}
+
+.form_header {
+  margin-bottom: 15px;
+}
+
+.home_link {
+  display: block;
+  margin-top: 5px;
+  color: #fe8402f1;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.home_link:hover {
+  text-decoration: underline;
+}

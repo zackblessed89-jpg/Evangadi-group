@@ -91,15 +91,15 @@ const Footer = () => {
           </p>
           <p className={styles.contactText}>
             <a
-              href="mailto:support@evangadi.com"
+              href="group1:support@evangadi.com"
               className={styles.contactLink}
             >
               support@evangadi.com
             </a>
           </p>
           <p className={styles.contactText}>
-            <a href="tel:+12023862702" className={styles.contactLink}>
-              +1-202-386-2702
+            <a href="tel:+251xxxxxxxxx" className={styles.contactLink}>
+              +251-xxx-xxx-xxx
             </a>
           </p>
         </div>

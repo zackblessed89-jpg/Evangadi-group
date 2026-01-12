@@ -1,42 +1,68 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { ArrowUp } from "lucide-react"; // Import an arrow icon
-import QuestionList from "../../features/questions/QuestionList/QuestionList";
+import { ArrowUp, Search } from "lucide-react";
 import classes from "./Home.module.css";
+import QuestionList from "../../features/questions/QuestionList/QuestionList";
 
-const Home = () => {
+
+function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  // to scroll to top smoothly
 
-  // Function to scroll smoothly to the top
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleAskQuestion = (e) => {
+    e.preventDefault();
+    navigate("/ask");
   };
 
   return (
     <div className={classes.home_container}>
       <div className={classes.header_row}>
-        <button onClick={() => navigate("/ask")} className={classes.askButton}>
+        <button onClick={handleAskQuestion} className={classes.askButton}>
           Ask Question
         </button>
+
         <h2 className={classes.welcome}>
-          Welcome: <span className={classes.username}>{user?.username}</span>
+          <span className={classes.wave_emoji}>👋</span> {""}
+          Welcome:
+          <span className={classes.username}>
+            <strong>{user?.username}</strong>
+          </span>
         </h2>
       </div>
 
       <div className={classes.search_section}>
+        <Search className={classes.search_icon} size={18} />
         <input
           type="text"
-          placeholder="Search questions..."
+          placeholder="Search questions...."
           className={classes.search_bar}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        {searchTerm && (
+          <button
+            onClick={() => setSearchTerm("")}
+            style={{
+              color: "#999",
+              cursor: "pointer",
+              border: "none",
+              background: "none",
+              position: "absolute",
+              right: "20px",
+              top: "50%",
+              transform: "translateY(-50%)",
+            }}
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       <div className={classes.question_list_wrapper}>
@@ -45,15 +71,14 @@ const Home = () => {
         <QuestionList searchTerm={searchTerm} />
       </div>
 
-      {/* 1. Add the Scroll to Top Button at the end */}
       <div className={classes.scroll_top_container}>
         <button onClick={scrollToTop} className={classes.scrollTopButton}>
           <ArrowUp size={20} />
-          Back to Top
+          Back To Top
         </button>
       </div>
     </div>
   );
-};
+}
 
 export default Home;

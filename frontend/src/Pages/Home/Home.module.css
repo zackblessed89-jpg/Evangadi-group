@@ -1,114 +1,158 @@
+/* --- Container & Layout --- */
 .home_container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 40px 20px;
-  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #3b455a;
 }
 
-/* Header Section */
+/* --- Header part --- */
 .header_row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .askButton {
   background-color: #3b82f6;
   color: white;
-  padding: 0.8rem 1.2rem;
-  border-radius: 0.375rem;
-  transition: background-color 0.3s;
+  padding: 0.5rem 1rem;
+ border-radius: 0.5rem;
+  transition: all 0.3s ease;
   border: none;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .askButton:hover {
   background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
 
 .welcome {
-  font-size: 1.2rem;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+}
+
+.wave_emoji {
+  font-size: 1.6rem;
+  transition: transform 0.3s ease;
+}
+
+.welcome:hover .wave_emoji {
+  transform: rotate(20deg);
 }
 
 .username {
   color: #fe8402;
   text-transform: capitalize;
   font-weight: 600;
-  margin-left: 5px;
 }
 
+/* --- Search Section --- */
 .search_section {
-  margin: 20px 0 30px 0; /* Space between header and question list */
+  position: relative;
+  margin: 30px 0;
   width: 100%;
 }
 
+.search_icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  pointer-events: none; /*this  Allow us clicking "through" to the input */
+}
+
 .search_bar {
-  width: 95%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  width: 100%;
+  padding: 14px 15px 14px 50px; 
+  border: 1px solid #ced4da;
+  border-radius: 8px;
   font-size: 1rem;
   outline: none;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-sizing: border-box; 
 }
 
 .search_bar:focus {
   border-color: #fe8402;
+  box-shadow: 0 0 8px rgba(254, 132, 2, 0.1);
+}
+
+/* --- Question List part --- */
+.question_list_wrapper {
+  margin-top: 20px;
 }
 
 .question_list_wrapper h3 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+  color: #111827;
 }
 
 .question_list_wrapper hr {
   border: none;
-  border-top: 1px solid var(--border-color);
-  margin-bottom: 20px;
+  border-top: 1px solid #e9ecef;
+  margin-bottom: 24px;
 }
 
-/* Home.module.css */
-
+/* -- Scroll To Top Section --- */
 .scroll_top_container {
   display: flex;
   justify-content: center;
-  padding: 40px 0; /* Space at the bottom of the page */
+  padding: 60px 0 20px 0;
 }
 
 .scrollTopButton {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background-color: #3b82f6; /* Matching your blue button */
+  gap: 10px;
+  background-color: #3b455a; 
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 25px; /* Rounded pill shape */
+  border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    transform 0.2s,
-    background-color 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .scrollTopButton:hover {
-  background-color: #2563eb;
-  transform: translateY(-3px); /* Slight lift effect */
+  background-color: #ce7b22;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(254, 132, 2, 0.2);
 }
 
 .scrollTopButton:active {
   transform: translateY(0);
 }
 
-@media (max-width: 600px) {
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
   .header_row {
     flex-direction: column-reverse;
-    gap: 20px;
     align-items: flex-start;
+    gap: 25px;
+  }
+
+  .home_container {
+    padding: 20px 15px;
+  }
+
+  .askButton {
+    width: 100%; /* Full width button on mobile */
+    text-align: center;
   }
 }

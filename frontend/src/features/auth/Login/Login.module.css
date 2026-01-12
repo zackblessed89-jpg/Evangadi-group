@@ -23,6 +23,9 @@
   font-size: 15px;
   outline: none;
 }
+.form input:focus {
+  border-color: #516cf0;
+}
 
 .password_wrapper {
   position: relative;

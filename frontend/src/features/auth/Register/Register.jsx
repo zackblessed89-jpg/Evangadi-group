@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { registerUser } from "../authService";
-import styles from "./Register.module.css";
+import classes from "./Register.module.css";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader/Loader";
 
-const Register = () => {
+const Register = ({ onSuccess }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
@@ -15,6 +16,7 @@ const Register = () => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,65 +26,113 @@ const Register = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       await registerUser(formData);
-      navigate("/login");
-    } catch (err) {
-      setError(err.message);
-    } finally {
+
+      // STOP loading so the spinner disappears
       setLoading(false);
+      // Trigger success state
+      setSuccess(true);
+
+      // Wait 1.5 seconds, then switch to Login view
+      setTimeout(() => {
+        if (onSuccess) {
+          onSuccess(); // Switches the view in Landing.jsx
+        } else {
+          navigate("/login"); // Fallback for routing
+        }
+      }, 1500);
+    } catch (err) {
+      setLoading(false);
+      setError(err.response?.data?.msg || err.message);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      {error && <p className={styles.error_msg}>{error}</p>}
+    <div className={classes.form_wrapper}>
+      {error && <p className={classes.error_msg}>{error}</p>}
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        onChange={handleChange}
-        required
-      />
-
-      <div className={styles.name_row}>
+      <form onSubmit={handleSubmit} className={classes.form}>
         <input
-          type="text"
-          name="firstname"
-          placeholder="First Name"
+          type="email"
+          name="email"
+          placeholder="Email"
           onChange={handleChange}
           required
+          disabled={loading || success}
         />
+
+        <div className={classes.name_row}>
+          <input
+            type="text"
+            name="firstname"
+            placeholder="First Name"
+            onChange={handleChange}
+            required
+            disabled={loading || success}
+          />
+          <input
+            type="text"
+            name="lastname"
+            placeholder="Last Name"
+            onChange={handleChange}
+            required
+            disabled={loading || success}
+          />
+        </div>
+
         <input
           type="text"
-          name="lastname"
-          placeholder="Last Name"
+          name="username"
+          placeholder="User Name"
           onChange={handleChange}
           required
+          disabled={loading || success}
         />
-      </div>
 
-      <input
-        type="text"
-        name="username"
-        placeholder="User Name"
-        onChange={handleChange}
-        required
-      />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          onChange={handleChange}
+          required
+          disabled={loading || success}
+        />
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        onChange={handleChange}
-        required
-      />
+        <button
+          type="submit"
+          className={classes.blue_btn}
+          disabled={loading || success}
+        >
+          {loading ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                justifyContent: "center",
+              }}
+            >
+              <Loader /> <span>Joining...</span>
+            </div>
+          ) : success ? (
+            "Joined!"
+          ) : (
+            "Agree and Join"
+          )}
+        </button>
 
-      <button type="submit" className={styles.blue_btn} disabled={loading}>
-        {loading ? "Joining..." : "Agree and Join"}
-      </button>
-    </form>
+        {success && (
+          <div className={classes.success_message_bottom}>
+            <p>
+              Welcome to the community, <strong>{formData.username}</strong>.
+            </p>
+            <small>Account Created! Redirecting to login...</small>
+          </div>
+        )}
+      </form>
+    </div>
   );
 };
 

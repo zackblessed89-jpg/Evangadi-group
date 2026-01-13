@@ -1,4 +1,5 @@
 import axiosBase from "../../services/axiosConfig";
+import axios from "axios";
 
 export const loginUser = async (loginData) => {
   try {
@@ -13,6 +14,35 @@ export const loginUser = async (loginData) => {
     const message =
       error.response?.data?.msg || "Login failed. Please try again.";
     throw new Error(message);
+  }
+};
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await axiosBase.post("/user/forgot-password", { email });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.msg || "Could not process request.");
+  }
+};
+
+export const resetPassword = async (token, newPassword) => {
+  const response = await axiosBase.post(`/user/reset-password/${token}`, {
+    password: newPassword,
+  });
+  return response.data;
+};
+export const changePassword = async (passwords) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axiosBase.post("/user/change-password", passwords, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.msg || "Failed to update password.");
   }
 };
 

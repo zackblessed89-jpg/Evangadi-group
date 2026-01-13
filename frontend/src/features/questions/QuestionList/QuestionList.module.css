@@ -8,13 +8,17 @@
 
 /* Individual Question Card */
 .question_item {
+  background-color: var(--card-bg) !important;
   display: flex;
   align-items: center;
   padding: 20px;
   border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 40px 120px rgba(0, 0, 0, 0.09);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
   text-decoration: none;
   color: inherit;
 }
@@ -92,7 +96,9 @@
 .arrow {
   font-size: 24px;
   color: #888;
-  transition: color 0.3s ease, transform 0.3s ease;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .question_item:hover .arrow {
@@ -152,10 +158,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .question_item:hover .arrow_circle {
   transform: scale(1.2);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+/* 1. When the question card turns white on hover in dark mode */
+:global([data-theme="dark"]) .question_item:hover {
+  background-color: #ffffff !important;
+}
+
+/* 2. Force the title and text inside that specific card to turn black */
+:global([data-theme="dark"]) .question_item:hover .question_title,
+:global([data-theme="dark"]) .question_item:hover .username,
+:global([data-theme="dark"]) .question_item:hover .question_content,
+:global([data-theme="dark"]) .question_item:hover .time_stamp {
+  color: #000000 !important;
 }

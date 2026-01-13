@@ -152,9 +152,6 @@ const QuestionDetail = () => {
         <section className={classes.post_answer_section}>
           <div className={classes.form_header}>
             <h3>Answer The Top Question</h3>
-            <Link to="/" className={classes.go_back}>
-              Go to Question page
-            </Link>
           </div>
           <form onSubmit={handlePostAnswer} className={classes.answer_form}>
             <textarea

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import  axiosBase  from "../services/axiosConfig";
+import axiosBase from "../services/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authService";
 
@@ -42,15 +42,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Inside AuthContext.jsx
   const login = async (loginData) => {
-    const data = await loginUser(loginData);
-    // Specifically pick the fields you want to ensure 'user' isn't the whole response
-    const userObj = data.user
-      ? data.user
-      : { username: data.username, userid: data.userid };
-    setUser(userObj);
-    return data;
+    try {
+      const data = await loginUser(loginData);
+      console.log("Data from Backend:", data);
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+      const userObj = {
+        username: data.username,
+        userid: data.userid || "authenticated",
+      };
+
+      setUser(userObj);
+
+      return data;
+    } catch (error) {
+      console.error("Login function error:", error);
+      throw error;
+    }
   };
 
   const logout = () => {

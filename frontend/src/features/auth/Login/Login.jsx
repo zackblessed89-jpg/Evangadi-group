@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
-//import { loginUser } from "../authService";
+
 import classes from "./Login.module.css";
 import { useNavigate, Link } from "react-router-dom";
 
 const Login = ({ onForgotClick }) => {
   const { login } = useAuth();
-  //const { setUser } = useAuth();
+
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");

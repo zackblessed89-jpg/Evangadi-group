@@ -1,12 +1,15 @@
-import React from "react";
+import {useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import classes from "./Header.module.css";
 import logo from "../../assets/images/Header-logo.png";
+import HowItWorks from "../../Pages/Landing/HowItWorks/HowItWorks";
 
 const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
 
   const handleAuth = () => {
     if (user) {
@@ -20,11 +23,12 @@ const Header = () => {
   };
 
   return (
+    <>
     <header className={classes.headerWrapper}>
       <div className={classes.headerContainer}>
         {/* Logo links back to the landing page */}
         <Link to="/" className={classes.logoLink}>
-          <img src={logo} alt="Evangadi Logo" />
+          <img src={logo} alt="Evangadi Logo" className={classes.logoImg} />
         </Link>
 
         <nav className={classes.navMenu}>
@@ -33,13 +37,22 @@ const Header = () => {
           </Link>
 
           <a
-            href="https://www.evangadi.com/how-it-works/"
-            target="_blank"
-            rel="noreferrer"
             className={classes.navItem}
+            onClick={() => setShowHowItWorks(true)}
           >
             How it Works
           </a>
+          {/* Strict check for logged-in user */}
+          {user?.userid && (
+            <>
+              <Link to="/settings" className={classes.navItem}>
+                Settings
+              </Link>
+              <div className={classes.navItem}>
+                <ThemeToggle />
+              </div>
+            </>
+          )}
 
           <button className={classes.authButton} onClick={handleAuth}>
             {user ? "LOG OUT" : "SIGN IN"}
@@ -47,6 +60,11 @@ const Header = () => {
         </nav>
       </div>
     </header>
+     {showHowItWorks && (
+        <HowItWorks onClose={() => setShowHowItWorks(false)} />
+  )
+  }
+  </>
   );
 };
 

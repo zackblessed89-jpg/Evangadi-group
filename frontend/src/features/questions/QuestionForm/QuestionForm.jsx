@@ -23,7 +23,7 @@ const QuestionForm = () => {
       console.error("Error details:", err);
       alert(
         err.response?.data?.msg ||
-          "Error posting question. Make sure you are logged in.",
+          "Error posting question. Make sure you are logged in."
       );
     } finally {
       setLoading(false);
@@ -53,5 +53,4 @@ const QuestionForm = () => {
     </div>
   );
 };
-
 export default QuestionForm;

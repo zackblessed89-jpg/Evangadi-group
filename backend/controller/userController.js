@@ -1,29 +1,57 @@
 const dbConnection = require("../config/dbConfig");
+// dbConnection => mysql database connection (used to run sql quieries like select , insert)
 const bcrypt = require("bcrypt");
+// hashed password securely and Prevents storing plain-text passwords in the database
+
 const { StatusCodes } = require("http-status-codes");
-const nodemailer = require("nodemailer");
+// Gives readable HTTP status codes forex. For OK its 200, for BAD_REQUEST  400, for Unauthorised its 401, etc.)
 
 const jwt = require("jsonwebtoken");
+//  used to create digital id card (token) for authentication
 
+// 1. REGISTER FUNCTION
+// handles new user Registration begins
 async function register(req, res) {
   const { username, firstname, lastname, email, password } = req.body;
+  // getting data from req.body meaning user input sent from frontend.
 
+  //  if any feild is missing from below return error
   if (!username || !firstname || !lastname || !email || !password) {
     return res.status(StatusCodes.BAD_REQUEST).json({
-      msg: "Please provide all required fields",
+      msg: "Please provide all required fields ",
     });
   }
 
+  // 1.1 email validation
+  // simple email validation Checks if email looks like: user@example.com if invalid return status code 400
+  const emailRegex = /^\S+@\S+\.\S+$/;
+  if (!emailRegex.test(email)) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Invalid email format" });
+  }
+
+  // 1.2 password length validation
+  // For security purpose Enforces minimum password standard must be at least 8 character
+
+  if (password.length < 8) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Password must be at least 8 characters" });
+  }
+  // Enforces minimum security standard Password must be at least 8 characters
   try {
     const [user] = await dbConnection.query(
-      "SELECT username, userid FROM users WHERE username = ? OR email = ?",
-      [username, email],
+      "SELECT username, userid FROM users Where username = ? OR email = ?",
+      [username, email]
     );
+    // Prevents duplicate usernames or emails
+    // If found → returns:
 
     if (user.length > 0) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ msg: "User already registered" });
+        .json({ msg: " already Users registered" });
     }
 
     if (password.length < 8) {
@@ -38,7 +66,7 @@ async function register(req, res) {
 
     await dbConnection.query(
       `INSERT INTO users (username, firstname, lastname, email, password) VALUES (?, ?, ?, ?, ?)`,
-      [username, firstname, lastname, email, hashedPassword],
+      [username, firstname, lastname, email, hashedPassword]
     );
 
     return res.status(StatusCodes.CREATED).json({ msg: "User registered" });
@@ -57,22 +85,21 @@ async function login(req, res) {
       .status(StatusCodes.BAD_REQUEST)
       .json({ msg: "Please provide all required fields" });
   }
-
   try {
     const [user] = await dbConnection.query(
-      "SELECT username, userid, password FROM users WHERE email = ? ",
-      [email],
+      "SELECT username, userid, password FROM users WHERE email =? ",
+      [email]
     );
     if (user.length == 0) {
       return res
-        .status(StatusCodes.BAD_REQUEST)
+        .status(StatusCodes.UNAUTHORIZED)
         .json({ msg: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user[0].password);
     if (!isMatch) {
       return res
-        .status(StatusCodes.BAD_REQUEST)
+        .status(StatusCodes.UNAUTHORIZED)
         .json({ msg: "Invalid credentials" });
     }
 
@@ -82,7 +109,7 @@ async function login(req, res) {
     const token = jwt.sign(
       { username, userid },
       process.env.JWT_SECRET || "default_secret",
-      { expiresIn: "1d" },
+      { expiresIn: "1d" }
     );
 
     return res

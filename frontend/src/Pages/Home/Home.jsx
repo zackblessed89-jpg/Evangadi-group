@@ -28,14 +28,21 @@ function Home() {
           Ask Question
         </button>
 
-        <h2 className={classes.welcome}>
-          <span className={classes.wave_emoji}>👋</span> {""}
-          Welcome:
-          <span className={classes.username}>
-            <strong>{user?.username}</strong>
-          </span>
-        </h2>
-      </div>
+        {/* ----- PREMIUM USER CHIP ----- */}
+
+        <div className={classes.user_chip}>
+          <div className={classes.user_avatar}>
+            {user?.username?.charAt(0).toUpperCase()}
+          </div>
+          <div className={classes.user_text}>
+            <span className={classes.user_status}>Online</span>
+            <span className={classes.user_name}>{user?.username}</span>
+          </div>
+        </div>
+
+          </div>
+
+        
 
       <div className={classes.search_section}>
         <Search className={classes.search_icon} size={18} />

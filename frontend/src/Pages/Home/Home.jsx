@@ -72,8 +72,7 @@ function Home() {
       </div>
 
       <div className={classes.scroll_top_container}>
-        <button onClick={scrollToTop}>
-          className={classes.scrollTopButton}
+        <button onClick={scrollToTop} className={classes.scrollTopButton}>
           <ArrowUp size={20} />
           Back To Top
         </button>

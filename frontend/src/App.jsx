@@ -13,6 +13,9 @@ import Home from "./Pages/Home/Home";
 import Landing from "./pages/Landing/Landing";
 import AskQuestion from "./pages/AskQuestion/AskQuestion";
 import QuestionDetail from "./pages/QuestionDetail/QuestionDetail";
+import Settings from "./pages/Settings/Settings";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import NotFound from "./pages/NotFound/NotFound";
 import AnswerForm from "./features/answers/AnswerForm/AnswerForm";
 
@@ -66,6 +69,9 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Landing />} />
           <Route path="/register" element={<Landing />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

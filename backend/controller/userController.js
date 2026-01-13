@@ -43,7 +43,7 @@ async function register(req, res) {
   try {
     const [user] = await dbConnection.query(
       "SELECT username, userid FROM users Where username = ? OR email = ?",
-      [username, email]
+      [username, email],
     );
     // Prevents duplicate usernames or emails
     // If found → returns:
@@ -66,7 +66,7 @@ async function register(req, res) {
 
     await dbConnection.query(
       `INSERT INTO users (username, firstname, lastname, email, password) VALUES (?, ?, ?, ?, ?)`,
-      [username, firstname, lastname, email, hashedPassword]
+      [username, firstname, lastname, email, hashedPassword],
     );
 
     return res.status(StatusCodes.CREATED).json({ msg: "User registered" });
@@ -88,7 +88,7 @@ async function login(req, res) {
   try {
     const [user] = await dbConnection.query(
       "SELECT username, userid, password FROM users WHERE email =? ",
-      [email]
+      [email],
     );
     if (user.length == 0) {
       return res
@@ -109,7 +109,7 @@ async function login(req, res) {
     const token = jwt.sign(
       { username, userid },
       process.env.JWT_SECRET || "default_secret",
-      { expiresIn: "1d" }
+      { expiresIn: "1d" },
     );
 
     return res
@@ -222,7 +222,7 @@ async function resetPassword(req, res) {
 
 async function changePassword(req, res) {
   const { currentPassword, newPassword } = req.body;
-  const { userid } = req.user; // Provided by your authMiddleware
+  const { userid } = req.user;
 
   if (!currentPassword || !newPassword) {
     return res

@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-// VERSION 2026: Use gemini-2.5-flash which has replaced older 1.5 versions
 const BASE_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 

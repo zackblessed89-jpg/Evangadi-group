@@ -2,8 +2,8 @@ import axiosBase from "../../services/axiosConfig";
 
 // For Eyerus
 export const getAllQuestions = async () => {
-  const response = await axiosBase.get("/question/getAllQuestions");
-  return response.data;
+  const response = await axiosBase.get("/question/getAllQuestions");//send et request method to the backend, usess the base url defined in axiosconfig
+  return response.data;// the response conatin status,header,data from server. we only want the data part
 };
 
 //  using question_id to match your controller

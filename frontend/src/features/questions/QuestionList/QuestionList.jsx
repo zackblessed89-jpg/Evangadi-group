@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+<<<<<<< HEAD
 import { Link, useNavigate } from "react-router-dom";
 import { CircleUser, ChevronRight, Edit2, Trash2 } from "lucide-react";
 import {
@@ -6,10 +7,20 @@ import {
   updateQuestion,
   deleteQuestion,
 } from "../questionService";
+=======
+import { Link } from "react-router-dom";
+import { CircleUser } from "lucide-react";
+import { getAllQuestions } from "../questionService";
+>>>>>>> 966b6285d129ab9b6651ab4adb5529e87eec5a01
 import classes from "./QuestionList.module.css";
 import { useAuth } from "../../../context/AuthContext";
 
+<<<<<<< HEAD
 function QuestionList({ searchTerm, onEdit, onDelete }) {
+=======
+function QuestionList({ searchTerm }) {
+  
+>>>>>>> 966b6285d129ab9b6651ab4adb5529e87eec5a01
   const [question, setQuestion] = useState([]);
   const [Loader, setLoader] = useState(true);
 
@@ -63,6 +74,7 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
     return filteredQuestions.slice(start, start + PAGE_SIZE);
   }, [filteredQuestions, currentPage]);
 
+<<<<<<< HEAD
   const { user } = useAuth();
   const currentUserId = user?.userid || user?.userid || null;
 
@@ -92,6 +104,8 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
     }
   };
 
+=======
+>>>>>>> 966b6285d129ab9b6651ab4adb5529e87eec5a01
   const changePage = (p) =>
     setCurrentPage(Math.min(Math.max(1, p), totalPages));
 
@@ -117,6 +131,7 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
         <p className={classes.no_data}>No Questions match your search.</p>
       ) : (
         // to map over paged (filtered) questions
+<<<<<<< HEAD
         pagedQuestions.map((q) => {
           const ownerId = q.userid || q.userId || q.user_id || null;
           const isOwner = !!(
@@ -137,6 +152,18 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
                 </div>
 
                 <p className={classes.user_name}>{q.username}</p>
+=======
+        pagedQuestions.map((q) => (
+          <Link
+            key={q.questionid || q.id}
+            to={`/question/${q.questionid || q.id}`}
+            className={classes.question_item}
+          >
+            {/* Left: Avatar + Username */}
+            <div className={classes.user_info}>
+              <div className={classes.avatar}>
+                <CircleUser size={40} strokeWidth={1.5} color="#d6671d" />
+>>>>>>> 966b6285d129ab9b6651ab4adb5529e87eec5a01
               </div>
               {/* Middle: Question Content + Meta */}
               <div className={classes.question_content}>
@@ -150,6 +177,7 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
               </div>
               {/* Right: Arrow */}
 
+<<<<<<< HEAD
               <div className={classes.action_group}>
                 {isOwner && (
                   <>
@@ -165,6 +193,21 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
                     >
                       <Edit2 size={16} />
                     </button>
+=======
+              <p className={classes.user_name}>{q.username}</p>
+            </div>
+            {/* Middle: Question Content + Meta */}
+            <div className={classes.question_content}>
+              <p className={classes.question_title}>{q.title}</p>
+              <p className={classes.question_meta}>
+                Asked by {q.username}
+                {q.createdAt
+                  ? ` • ${new Date(q.createdAt).toLocaleDateString()}`
+                  : ""}
+              </p>
+            </div>
+            {/* Right: Arrow */}
+>>>>>>> 966b6285d129ab9b6651ab4adb5529e87eec5a01
 
                     <button
                       className={classes.icon_btn_danger}
@@ -188,6 +231,60 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
             </Link>
           );
         })
+      )}
+
+      {/* Pagination UI */}
+      {totalPages > 1 && (
+        <div className={classes.pagination}>
+          <button
+            className={classes.page_btn}
+            onClick={() => changePage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+
+          {(() => {
+            const pages = [];
+            const maxButtons = 5;
+            if (totalPages <= maxButtons) {
+              for (let i = 1; i <= totalPages; i++) pages.push(i);
+            } else {
+              let start = Math.max(1, currentPage - 2);
+              let end = Math.min(totalPages, start + maxButtons - 1);
+              if (end - start < maxButtons - 1)
+                start = Math.max(1, end - maxButtons + 1);
+              for (let i = start; i <= end; i++) pages.push(i);
+              if (start > 1) pages[0] = 1;
+              if (end < totalPages) pages[pages.length - 1] = totalPages;
+            }
+
+            return pages.map((p, idx) => {
+              const isGap = idx > 0 && p - pages[idx - 1] > 1;
+              return (
+                <React.Fragment key={`${p}-frag`}>
+                  {isGap && <span className={classes.ellipsis}>…</span>}
+                  <button
+                    className={`${classes.page_btn} ${
+                      p === currentPage ? classes.active : ""
+                    }`}
+                    onClick={() => changePage(p)}
+                  >
+                    {p}
+                  </button>
+                </React.Fragment>
+              );
+            });
+          })()}
+
+          <button
+            className={classes.page_btn}
+            onClick={() => changePage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       )}
 
       {/* Pagination UI */}

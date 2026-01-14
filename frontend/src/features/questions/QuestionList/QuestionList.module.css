@@ -8,6 +8,7 @@
 
 /* Individual Question Card */
 .question_item {
+  background-color: var(--card-bg) !important;
   display: flex;
   align-items: center;
   padding: 20px;

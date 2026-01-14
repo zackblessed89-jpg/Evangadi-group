@@ -246,5 +246,4 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
     </div>
   );
 }
-
 export default QuestionList;

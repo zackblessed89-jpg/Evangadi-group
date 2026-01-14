@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { CircleUser } from "lucide-react";
 import { getAllQuestions } from "../questionService";
 import classes from "./QuestionList.module.css";
-import { ChevronRight } from "lucide-react";
+import { useAuth } from "../../../context/AuthContext";
 
 function QuestionList({ searchTerm }) {
   
@@ -96,6 +96,21 @@ function QuestionList({ searchTerm }) {
               <div className={classes.avatar}>
                 <CircleUser size={40} strokeWidth={1.5} color="#d6671d" />
               </div>
+            </Link>
+          );
+        })
+      )}
+
+      {/* Pagination UI */}
+      {totalPages > 1 && (
+        <div className={classes.pagination}>
+          <button
+            className={classes.page_btn}
+            onClick={() => changePage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
 
               <p className={classes.user_name}>{q.username}</p>
             </div>

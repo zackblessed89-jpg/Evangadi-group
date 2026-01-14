@@ -9,7 +9,7 @@ export const getAllQuestions = async () => {
 //  using question_id to match your controller
 export const getSingleQuestion = async (question_id) => {
   const response = await axiosBase.get(
-    `/question/getSingleQuestion/${question_id}`,
+    `/question/getSingleQuestion/${question_id}`
   );
   return response.data;
 };
@@ -21,5 +21,20 @@ export const askQuestion = async (title, description, tag) => {
     description,
     tag,
   });
+  return response.data;
+};
+
+export const updateQuestion = async (question_id, data) => {
+  const response = await axiosBase.put(
+    `/question/updateQuestion/${question_id}`,
+    data
+  );
+  return response.data;
+};
+
+export const deleteQuestion = async (question_id) => {
+  const response = await axiosBase.delete(
+    `/question/deleteQuestion/${question_id}`
+  );
   return response.data;
 };

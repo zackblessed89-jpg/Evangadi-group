@@ -7,6 +7,7 @@ import { getSingleQuestion } from "../questionService";
 import { getAnswers, postAnswer } from "../../answers/answerService";
 
 import { getTimeAgo } from "../../../utilis/formatTime";
+import { getAiSummary } from "../../../utilis/aiService";
 
 // Import Loader Component
 import Loader from "../../../components/Loader/Loader";
@@ -21,6 +22,10 @@ const QuestionDetail = () => {
   const [newAnswer, setNewAnswer] = useState(""); //What the user is currently typing in the box.
   const [loading, setLoading] = useState(true); //True when the page first opens; false when data arrives.
   const [posting, setPosting] = useState(false); //True only while the "Post" button is clicked and waiting for the server.
+
+  // AI State
+  const [aiSummary, setAiSummary] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
 
   const fetchData = async () => {
     if (!questionId) return; // Safety guard
@@ -64,6 +69,19 @@ const QuestionDetail = () => {
     }
   };
 
+  const handleAiSummarize = async () => {
+    if (!question || answers.length === 0) return;
+    setAiLoading(true);
+    try {
+      const summary = await getAiSummary(question.title, answers);
+      setAiSummary(summary);
+    } catch (error) {
+      setAiSummary("Could not generate summary.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   // --- LOADING STATE ---
   if (loading) {
     return (
@@ -78,6 +96,21 @@ const QuestionDetail = () => {
       <div className={classes.inner_container}>
         <section className={classes.question_section}>
           <QuestionHeaderUI questionData={question} />
+          <div className={classes.ai_section}>
+            <button
+              onClick={handleAiSummarize}
+              className={classes.ai_button}
+              disabled={aiLoading || answers.length === 0}
+            >
+              {aiLoading ? "AI is thinking..." : "✨ Summarize Discussion"}
+            </button>
+            {aiSummary && (
+              <div className={classes.ai_summary_box}>
+                <h3>✨ AI Discussion Summary</h3>
+                <div className={classes.summary_content}>{aiSummary}</div>
+              </div>
+            )}
+          </div>
         </section>
 
         <section className={classes.answers_section}>
@@ -119,9 +152,6 @@ const QuestionDetail = () => {
         <section className={classes.post_answer_section}>
           <div className={classes.form_header}>
             <h3>Answer The Top Question</h3>
-            <Link to="/" className={classes.go_back}>
-              Go to Question page
-            </Link>
           </div>
           <form onSubmit={handlePostAnswer} className={classes.answer_form}>
             <textarea

@@ -160,3 +160,67 @@
   transform: scale(1.2);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
+
+/* 1. When the question card turns white on hover in dark mode */
+:global([data-theme="dark"]) .question_item:hover {
+  background-color: #ffffff !important;
+}
+
+/* 2. Force the title and text inside that specific card to turn black */
+:global([data-theme="dark"]) .question_item:hover .question_title,
+:global([data-theme="dark"]) .question_item:hover .username,
+:global([data-theme="dark"]) .question_item:hover .question_content,
+:global([data-theme="dark"]) .question_item:hover .time_stamp {
+  color: #000000 !important;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.page_btn {
+  min-width: 40px;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid rgba(34, 34, 34, 0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.15s ease;
+  box-shadow: 0 6px 18px rgba(59, 80, 182, 0.06);
+}
+
+.page_btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.page_btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  transform: none;
+}
+
+.active {
+  background: linear-gradient(135deg, #3b50b6, #6c82f1);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(59, 80, 182, 0.18);
+}
+
+.ellipsis {
+  color: #888;
+  padding: 0 6px;
+}
+
+@media (max-width: 480px) {
+  .page_btn {
+    min-width: 34px;
+    padding: 6px 8px;
+    border-radius: 6px;
+  }
+}

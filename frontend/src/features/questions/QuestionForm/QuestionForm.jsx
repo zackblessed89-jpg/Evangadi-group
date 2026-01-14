@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { askQuestion } from "../questionService";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { askQuestion, updateQuestion } from "../questionService";
 import classes from "./QuestionForm.module.css";
 
 const QuestionForm = () => {
@@ -8,6 +8,18 @@ const QuestionForm = () => {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // detect edit mode from navigation state
+  const isEdit = location?.state?.edit === true;
+  const editQuestion = location?.state?.question || null;
+
+  useEffect(() => {
+    if (isEdit && editQuestion) {
+      setTitle(editQuestion.title || "");
+      setDescription(editQuestion.description || "");
+    }
+  }, [isEdit, editQuestion]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,6 +27,16 @@ const QuestionForm = () => {
 
     setLoading(true);
     try {
+      if (isEdit && editQuestion) {
+        await updateQuestion(editQuestion.questionid || editQuestion.id, {
+          title,
+          description,
+        });
+        alert("Question updated successfully!");
+        navigate(`/question/${editQuestion.questionid || editQuestion.id}`);
+        return;
+      }
+
       await askQuestion(title, description, "General");
 
       alert("Question posted successfully!");
@@ -47,7 +69,13 @@ const QuestionForm = () => {
           onChange={(e) => setDescription(e.target.value)}
         />
         <button type="submit" className={classes.post_btn} disabled={loading}>
-          {loading ? "Posting..." : "Post Your Question"}
+          {loading
+            ? isEdit
+              ? "Updating..."
+              : "Posting..."
+            : isEdit
+            ? "Update Question"
+            : "Post Your Question"}
         </button>
       </form>
     </div>

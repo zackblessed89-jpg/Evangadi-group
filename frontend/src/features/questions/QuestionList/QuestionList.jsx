@@ -46,7 +46,7 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 7;
+  const PAGE_SIZE = 5;
 
   const totalPages = Math.max(
     1,

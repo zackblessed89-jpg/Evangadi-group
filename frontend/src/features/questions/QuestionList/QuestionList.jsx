@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { CircleUser } from "lucide-react";
 import { getAllQuestions } from "../questionService";
@@ -32,9 +32,35 @@ function QuestionList({ searchTerm }) {
   }, []);
 
   // Filter logic:- this creates a new list based on the search input
-  const filteredQuestions = question.filter((q) =>
-    q.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredQuestions = useMemo(
+    () =>
+      question.filter((q) =>
+        q.title.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [question, searchTerm]
   );
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 7;
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredQuestions.length / PAGE_SIZE)
+  );
+
+  useEffect(() => {
+    // reset to first page when search or question list changes
+    setCurrentPage(1);
+  }, [searchTerm, question.length]);
+
+  const pagedQuestions = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return filteredQuestions.slice(start, start + PAGE_SIZE);
+  }, [filteredQuestions, currentPage]);
+
+  const changePage = (p) =>
+    setCurrentPage(Math.min(Math.max(1, p), totalPages));
 
   // then we handle loading state
   if (Loader) {
@@ -57,11 +83,11 @@ function QuestionList({ searchTerm }) {
       {filteredQuestions.length === 0 ? (
         <p className={classes.no_data}>No Questions match your search.</p>
       ) : (
-        // to map over filtered questions
-        filteredQuestions.map((q) => (
+        // to map over paged (filtered) questions
+        pagedQuestions.map((q) => (
           <Link
             key={q.questionid || q.id}
-            to={`/question/${q.questionid}`}
+            to={`/question/${q.questionid || q.id}`}
             className={classes.question_item}
           >
             {/* Left: Avatar + Username */}
@@ -76,7 +102,7 @@ function QuestionList({ searchTerm }) {
             <div className={classes.question_content}>
               <p className={classes.question_title}>{q.title}</p>
               <p className={classes.question_meta}>
-                Asked by {q.username}{" "}
+                Asked by {q.username}
                 {q.createdAt
                   ? ` • ${new Date(q.createdAt).toLocaleDateString()}`
                   : ""}
@@ -89,6 +115,60 @@ function QuestionList({ searchTerm }) {
             </div>
           </Link>
         ))
+      )}
+
+      {/* Pagination UI */}
+      {totalPages > 1 && (
+        <div className={classes.pagination}>
+          <button
+            className={classes.page_btn}
+            onClick={() => changePage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+
+          {(() => {
+            const pages = [];
+            const maxButtons = 5;
+            if (totalPages <= maxButtons) {
+              for (let i = 1; i <= totalPages; i++) pages.push(i);
+            } else {
+              let start = Math.max(1, currentPage - 2);
+              let end = Math.min(totalPages, start + maxButtons - 1);
+              if (end - start < maxButtons - 1)
+                start = Math.max(1, end - maxButtons + 1);
+              for (let i = start; i <= end; i++) pages.push(i);
+              if (start > 1) pages[0] = 1;
+              if (end < totalPages) pages[pages.length - 1] = totalPages;
+            }
+
+            return pages.map((p, idx) => {
+              const isGap = idx > 0 && p - pages[idx - 1] > 1;
+              return (
+                <React.Fragment key={`${p}-frag`}>
+                  {isGap && <span className={classes.ellipsis}>…</span>}
+                  <button
+                    className={`${classes.page_btn} ${
+                      p === currentPage ? classes.active : ""
+                    }`}
+                    onClick={() => changePage(p)}
+                  >
+                    {p}
+                  </button>
+                </React.Fragment>
+              );
+            });
+          })()}
+
+          <button
+            className={classes.page_btn}
+            onClick={() => changePage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       )}
     </div>
   );

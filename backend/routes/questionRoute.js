@@ -9,6 +9,9 @@ const {
   postQuestion,
   getAllQuestions,
   getSingleQuestion,
+  updateQuestion,
+  deleteQuestion
+
 } = require("../controller/questionController");
 
 // 1. Post a question - [POST] /api/question/
@@ -24,5 +27,9 @@ router.get(
   authMiddleware,
   getSingleQuestion,
 );
+// Update a question
+router.put("/updateQuestion/:question_id", authMiddleware, updateQuestion);
 
+// Delete a question
+router.delete("/deleteQuestion/:question_id", authMiddleware, deleteQuestion);
 module.exports = router;

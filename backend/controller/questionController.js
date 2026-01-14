@@ -134,4 +134,74 @@ async function getSingleQuestion(req, res) {
   }
 }
 
-module.exports = { postQuestion, getAllQuestions, getSingleQuestion };
+// Update question
+async function updateQuestion(req, res) {
+  const { question_id } = req.params;
+  const { title, description, tag } = req.body;
+
+  if (!title || !description) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Title and description are required" });
+  }
+
+  try {
+    const [existing] = await dbConnection.execute(
+      "SELECT * FROM questions WHERE questionid = ?",
+      [question_id]
+    );
+
+    if (existing.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ msg: "Question not found" });
+    }
+
+    await dbConnection.execute(
+      "UPDATE questions SET title = ?, description = ?, tag = ? WHERE questionid = ?",
+      [title, description, tag || null, question_id]
+    );
+
+    res.status(StatusCodes.OK).json({ msg: "Question updated successfully" });
+  } catch (error) {
+    console.error("Error updating question:", error.message);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Something went wrong" });
+  }
+}
+
+// Delete question
+async function deleteQuestion(req, res) {
+  const { question_id } = req.params;
+
+  try {
+    const [existing] = await dbConnection.execute(
+      "SELECT * FROM questions WHERE questionid = ?",
+      [question_id]
+    );
+
+    if (existing.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ msg: "Question not found" });
+    }
+
+    await dbConnection.execute("DELETE FROM questions WHERE questionid = ?", [
+      question_id,
+    ]);
+
+    res.status(StatusCodes.OK).json({ msg: "Question deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting question:", error.message);
+    res.status(500).json({ msg: "Something went wrong" });
+  }
+}
+
+module.exports = {
+  postQuestion,
+  getAllQuestions,
+  getSingleQuestion,
+  updateQuestion,
+  deleteQuestion,
+};

@@ -42,11 +42,13 @@ const QuestionForm = () => {
       alert("Question posted successfully!");
       navigate("/");
     } catch (err) {
-      console.error("Error details:", err);
-      alert(
-        err.response?.data?.msg ||
-          "Error posting question. Make sure you are logged in."
-      );
+      console.error("Error posting question - full error:", err);
+      const status = err.response?.status;
+      const serverMsg = err.response?.data?.msg || err.response?.data || null;
+      const message = serverMsg
+        ? `${serverMsg} ${status ? `(status ${status})` : ""}`.trim()
+        : err.message || "Error posting question. Make sure you are logged in.";
+      alert(message);
     } finally {
       setLoading(false);
     }

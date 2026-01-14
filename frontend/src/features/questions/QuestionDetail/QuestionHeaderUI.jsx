@@ -15,11 +15,10 @@ const QuestionHeaderUI = ({ questionData }) => {
       {/* Back to Questions Button */}
       <button onClick={() => navigate("/")} className={classes.back_button}>
         <ArrowLeftCircle size={20} />
-        <span>Back to Dashboard</span>
+        <span>All Questions</span>
       </button>
 
       <h2 className={classes.title}>
-        <ArrowRight className={classes.icon} size={22} />
         {questionData?.title}
       </h2>
 

@@ -1,28 +1,25 @@
-/* make sure add this in header css
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 1000; /* Keeps it above everything else */
 .headerWrapper {
+  display: flex;
+  justify-content: center;
   background-color: #ffffff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 1000;
   width: 100%;
+  align-items: center;
+  transition: background-color 0.3s ease;
 }
 
 .headerContainer {
+  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-}
-
-.logoLink img {
-  height: 30px;
+  /* align-items: center; */
+  padding: 5px 40px;
+  height: 80px;
 }
 
 .navMenu {
@@ -33,13 +30,13 @@
 
 .navItem {
   text-decoration: none;
-  color: #333;
+  color: var(--global-text);
   font-weight: 500;
-  transition: 0.3s;
+  transition: color 0.3s ease;
 }
 
 .navItem:hover {
-  color: #ff8500; /* Evangadi Orange */
+  color: #fe8402; /* Orange hover */
 }
 
 .authButton {
@@ -56,6 +53,37 @@
 
 .authButton:hover {
   background-color: #ff8500;
+}
+
+/* --- DARK MODE OVERRIDES (FIX VISIBILITY) --- */
+
+/* Inverts the logo automatically when the data-theme is dark */
+
+:global([data-theme="dark"]) .logoImg {
+  filter: brightness(0) invert(1) !important;
+}
+
+/* 1. Background colors */
+:global([data-theme="dark"]) .headerWrapper {
+  background-color: #1a1a2e !important;
+}
+
+:global([data-theme="dark"]) body {
+  background-color: #121221 !important;
+}
+
+/* 2. Text Visibility (Force White) */
+:global([data-theme="dark"]) .navItem,
+:global([data-theme="dark"]) p,
+:global([data-theme="dark"]) h1,
+:global([data-theme="dark"]) h2,
+:global([data-theme="dark"]) h3 {
+  color: #ffffff !important;
+}
+
+/* 3. Logo Visibility (Inverts black logo to white) */
+:global([data-theme="dark"]) .logoImg {
+  filter: brightness(0) invert(1);
 }
 
 @media (max-width: 768px) {

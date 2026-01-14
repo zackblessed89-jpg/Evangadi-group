@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
-//import { loginUser } from "../authService";
+
 import classes from "./Login.module.css";
 import { useNavigate, Link } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ onForgotClick }) => {
   const { login } = useAuth();
-  //const { setUser } = useAuth();
+
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -68,10 +68,23 @@ const Login = () => {
           </span>
         </div>
 
-        <div className={classes.forgot_link_container}>
-          <Link to="/" className={classes.forgot_link}>
+        <div
+          className={classes.forgot_link_container}
+          style={{ textAlign: "right", marginBottom: "15px" }}
+        >
+          <span
+            className={classes.forgot_link}
+            onClick={onForgotClick}
+            style={{
+              cursor: "pointer",
+              color: "#fe8402",
+              fontSize: "13px",
+              fontWeight: "500",
+              display: "inline-block",
+            }}
+          >
             Forgot password?
-          </Link>
+          </span>
         </div>
 
         <button

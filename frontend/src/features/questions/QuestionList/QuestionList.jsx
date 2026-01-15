@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleUser, ChevronRight, Edit2, Trash2 } from "lucide-react";
-import {
-  getAllQuestions,
-  updateQuestion,
-  deleteQuestion,
-} from "../questionService";
+import { getAllQuestions, deleteQuestion } from "../questionService";
 import classes from "./QuestionList.module.css";
 import { useAuth } from "../../../context/AuthContext";
 
@@ -19,7 +15,6 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
         setLoader(true);
         const data = await getAllQuestions();
 
-        // Extract the data array from the response we got
         const extractedQuestions = data?.data;
         if (Array.isArray(extractedQuestions)) {
           setQuestion(extractedQuestions);
@@ -32,10 +27,11 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
         setLoader(false);
       }
     };
+
     fetchQuestion();
   }, []);
 
-  // Filter logic:- this creates a new list based on the search input
+  // Filter logic
   const filteredQuestions = useMemo(
     () =>
       question.filter((q) =>
@@ -54,7 +50,6 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
   );
 
   useEffect(() => {
-    // reset to first page when search or question list changes
     setCurrentPage(1);
   }, [searchTerm, question.length]);
 
@@ -64,43 +59,36 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
   }, [filteredQuestions, currentPage]);
 
   const { user } = useAuth();
-  const currentUserId = user?.userid || user?.userid || null;
+  const currentUserId = user?.userid || null;
 
-  // default handlers if parent doesn't provide them
   const navigate = useNavigate();
 
   const handleEdit = (q) => {
-    // navigate to Ask page with state so the form loads in edit mode
     navigate("/ask", { state: { edit: true, question: q } });
   };
 
   const handleDelete = async (q) => {
     try {
       if (!confirm("Delete this question? This cannot be undone.")) return;
+
       await deleteQuestion(q.questionid || q.id);
+
       setQuestion((prev) =>
         prev.filter((item) => item.questionid !== (q.questionid || q.id))
       );
     } catch (err) {
-      console.error("Delete failed - full error:", err);
-      const status = err.response?.status;
-      const serverMsg = err.response?.data?.msg || err.response?.data || null;
-      const message = serverMsg
-        ? `${serverMsg} ${status ? `(status ${status})` : ""}`.trim()
-        : err.message || "Failed to delete question.";
-      alert(message);
+      console.error("Delete failed:", err);
+      alert("Failed to delete question.");
     }
   };
 
   const changePage = (p) =>
     setCurrentPage(Math.min(Math.max(1, p), totalPages));
 
-  // then we handle loading state
   if (Loader) {
     return <div className={classes.loading}>Loading Questions ....</div>;
   }
 
-  //  handle empty state (when thereis no questions from the db)
   if (question.length === 0) {
     return (
       <p className={classes.no_data}>
@@ -111,18 +99,16 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
 
   return (
     <div className={classes.question_list}>
-      {/* to handle no search result */}
-
       {filteredQuestions.length === 0 ? (
         <p className={classes.no_data}>No Questions match your search.</p>
       ) : (
-        // to map over paged (filtered) questions
         pagedQuestions.map((q) => {
           const ownerId = q.userid || q.userId || q.user_id || null;
-          const isOwner = !!(
+          const isOwner =
             user &&
-            (ownerId ? ownerId === currentUserId : user.username === q.username)
-          );
+            (ownerId
+              ? ownerId === currentUserId
+              : user.username === q.username);
 
           return (
             <Link
@@ -130,26 +116,25 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
               to={`/question/${q.questionid || q.id}`}
               className={classes.question_item}
             >
-              {/* Left: Avatar + Username */}
+              {/* Left */}
               <div className={classes.user_info}>
                 <div className={classes.avatar}>
                   <CircleUser size={40} strokeWidth={1.5} color="#d6671d" />
                 </div>
-
                 <p className={classes.user_name}>{q.username}</p>
               </div>
-              {/* Middle: Question Content + Meta */}
+
+              {/* Middle */}
               <div className={classes.question_content}>
                 <p className={classes.question_title}>{q.title}</p>
                 <p className={classes.question_meta}>
                   Asked by {q.username}
-                  {q.createdAt
-                    ? ` • ${new Date(q.createdAt).toLocaleDateString()}`
-                    : ""}
+                  {q.createdAt &&
+                    ` • ${new Date(q.createdAt).toLocaleDateString()}`}
                 </p>
               </div>
-              {/* Right: Arrow */}
 
+              {/* Right */}
               <div className={classes.action_group}>
                 {isOwner && (
                   <>
@@ -158,8 +143,7 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        if (typeof onEdit === "function") onEdit(q);
-                        else handleEdit(q);
+                        onEdit ? onEdit(q) : handleEdit(q);
                       }}
                       title="Edit question"
                     >
@@ -171,8 +155,7 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        if (typeof onDelete === "function") onDelete(q);
-                        else handleDelete(q);
+                        onDelete ? onDelete(q) : handleDelete(q);
                       }}
                       title="Delete question"
                     >
@@ -190,7 +173,7 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
         })
       )}
 
-      {/* Pagination UI */}
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className={classes.pagination}>
           <button
@@ -201,38 +184,17 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
             Prev
           </button>
 
-          {(() => {
-            const pages = [];
-            const maxButtons = 5;
-            if (totalPages <= maxButtons) {
-              for (let i = 1; i <= totalPages; i++) pages.push(i);
-            } else {
-              let start = Math.max(1, currentPage - 2);
-              let end = Math.min(totalPages, start + maxButtons - 1);
-              if (end - start < maxButtons - 1)
-                start = Math.max(1, end - maxButtons + 1);
-              for (let i = start; i <= end; i++) pages.push(i);
-              if (start > 1) pages[0] = 1;
-              if (end < totalPages) pages[pages.length - 1] = totalPages;
-            }
-
-            return pages.map((p, idx) => {
-              const isGap = idx > 0 && p - pages[idx - 1] > 1;
-              return (
-                <React.Fragment key={`${p}-frag`}>
-                  {isGap && <span className={classes.ellipsis}>…</span>}
-                  <button
-                    className={`${classes.page_btn} ${
-                      p === currentPage ? classes.active : ""
-                    }`}
-                    onClick={() => changePage(p)}
-                  >
-                    {p}
-                  </button>
-                </React.Fragment>
-              );
-            });
-          })()}
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              className={`${classes.page_btn} ${
+                currentPage === i + 1 ? classes.active : ""
+              }`}
+              onClick={() => changePage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
 
           <button
             className={classes.page_btn}
@@ -246,4 +208,5 @@ function QuestionList({ searchTerm, onEdit, onDelete }) {
     </div>
   );
 }
+
 export default QuestionList;

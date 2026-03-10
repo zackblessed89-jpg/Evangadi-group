@@ -10,13 +10,13 @@ import Loader from "./Components/Loader/Loader";
 
 // Pages
 import Home from "./Pages/Home/Home";
-import Landing from "./pages/Landing/Landing";
-import AskQuestion from "./pages/AskQuestion/AskQuestion";
-import QuestionDetail from "./pages/QuestionDetail/QuestionDetail";
-import Settings from "./pages/Settings/Settings";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import NotFound from "./pages/NotFound/NotFound";
+import Landing from "./Pages/Landing/Landing";
+import AskQuestion from "./Pages/AskQuestion/AskQuestion";
+import QuestionDetail from "./Pages/QuestionDetail/QuestionDetail";
+import Settings from "./Pages/Settings/Settings";
+import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword/ResetPassword";
+import NotFound from "./Pages/NotFound/NotFound";
 import AnswerForm from "./features/answers/AnswerForm/AnswerForm";
 
 function App() {

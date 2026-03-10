@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import classes from "./Header.module.css";
-import logo from "../../assets/images/Header-logo.png";
+import logo from "../../assets/images/header-logo.png";
 import HowItWorks from "../../Pages/Landing/HowItWorks/HowItWorks";
 
 const Header = () => {

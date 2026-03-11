@@ -3,10 +3,10 @@ import { useAuth } from "./context/AuthContext";
 import "./App.css";
 
 // Global Components
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import Loader from "./components/Loader/Loader";
+import Header from "./components/Header/Header.jsx";
+import Footer from "./components/Footer/Footer.jsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
+import Loader from "./components/Loader/Loader.jsx";
 
 // Pages
 import Home from "./Pages/Home/Home";
